@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Paper Bags, Cups, & Dish</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles & Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        /* Background pattern */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f8f9fa"/><path d="M20,20 L80,20 L80,80 L20,80 Z" fill="none" stroke="%23e9ecef" stroke-width="2"/><path d="M30,30 L30,70 M70,30 L70,70 M50,30 L50,70" fill="none" stroke="%23e9ecef" stroke-width="1"/></svg>');
+            background-size: 150px;
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        /* Page Container */
+        .page {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            padding: 15px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #2c3e50, #4a6572);
+            color: white;
+            padding: 18px;
+            text-align: center;
+            border-bottom: 5px solid #d4a762;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><path d="M20,20 L40,20 L40,40 L20,40 Z" fill="none" stroke="%23ffffff" stroke-width="0.5" opacity="0.2"/><circle cx="30" cy="30" r="10" fill="none" stroke="%23ffffff" stroke-width="0.3" opacity="0.2"/></svg>');
+            opacity: 0.1;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tagline {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+        
+        /* Form Styles */
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin: 15px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #2c3e50, #d4a762, #2c3e50);
+        }
+        
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 8px;
+        }
+        
+        .form-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 3px;
+            background-color: #d4a762;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #555;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #d4a762;
+            box-shadow: 0 0 0 2px rgba(212, 167, 98, 0.2);
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(to right, #2c3e50, #4a6572);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(to right, #4a6572, #2c3e50);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(to right, #d4a762, #c1923e);
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(to right, #c1923e, #d4a762);
+        }
+        
+        .btn-small {
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            width: auto;
+            display: inline-block;
+        }
+        
+        /* Product Options */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .option-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            cursor: pointer;
+            animation: slideInRight 0.6s ease backwards;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .option-card:nth-child(1) { animation-delay: 0.1s; }
+        .option-card:nth-child(2) { animation-delay: 0.2s; }
+        .option-card:nth-child(3) { animation-delay: 0.3s; }
+        
+        .option-image {
+            height: 160px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .bags-image {
+            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%234a6572"/><path d="M80,50 L120,50 L120,150 L80,150 Z" fill="%23d4a762"/><path d="M120,50 L140,70 L140,170 L120,150 Z" fill="%23c1923e"/><path d="M200,60 L240,60 L240,160 L200,160 Z" fill="%23d4a762"/><path d="M240,60 L260,80 L260,180 L240,160 Z" fill="%23c1923e"/><path d="M320,70 L360,70 L360,170 L320,170 Z" fill="%23d4a762"/><path d="M360,70 L380,90 L380,190 L360,170 Z" fill="%23c1923e"/></svg>');
+        }
+        
+        .cups-image {
+            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%234a6572"/><ellipse cx="100" cy="120" rx="30" ry="40" fill="%23d4a762"/><ellipse cx="100" cy="80" rx="25" ry="20" fill="%23ffffff"/><ellipse cx="220" cy="120" rx="35" ry="45" fill="%23d4a762"/><ellipse cx="220" cy="70" rx="30" ry="25" fill="%23ffffff"/><ellipse cx="340" cy="120" rx="40" ry="50" fill="%23d4a762"/><ellipse cx="340" cy="60" rx="35" ry="30" fill="%23ffffff"/></svg>');
+        }
+        
+        .dish-image {
+            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%234a6572"/><ellipse cx="100" cy="100" rx="50" ry="30" fill="%23d4a762"/><circle cx="100" cy="100" r="40" fill="%23f8f9fa"/><ellipse cx="220" cy="100" rx="60" ry="35" fill="%23d4a762"/><circle cx="220" cy="100" r="45" fill="%23f8f9fa"/><ellipse cx="340" cy="100" rx="70" ry="40" fill="%23d4a762"/><circle cx="340" cy="100" r="50" fill="%23f8f9fa"/></svg>');
+        }
+        
+        .option-content {
+            padding: 16px;
+        }
+        
+        .option-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        .option-desc {
+            color: #666;
+            text-align: center;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        /* Products Page */
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .back-btn {
+            background-color: #4a6572;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background-color: #2c3e50;
+        }
+        
+        .page-title {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            text-align: center;
+        }
+        
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+            transition: all 0.3s;
+            animation: fadeInUp 0.5s ease backwards;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .product-image {
+            height: 140px;
+            background-color: #f8f9fa;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .product-content {
+            padding: 12px;
+        }
+        
+        .product-name {
+            font-size: 1rem;
+            color: #2c3e50;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .product-desc {
+            color: #666;
+            font-size: 0.85rem;
+            line-height: 1.3;
+            height: 35px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 15px;
+            color: #777;
+            font-style: italic;
+            grid-column: 1 / -1;
+        }
+        
+        /* Product Details Page */
+        .product-details-container {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-top: 15px;
+            animation: fadeIn 0.6s ease;
+        }
+        
+        .product-details-image {
+            height: 250px;
+            background-color: #f8f9fa;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .product-details-content {
+            padding: 20px;
+        }
+        
+        .product-details-name {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .product-details-full {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .details-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 15px;
+            display: block;
+        }
+        
+        /* Talk with Us Section */
+        .contact-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-top: 20px;
+            animation: slideInRight 0.5s ease;
+        }
+        
+        .contact-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 16px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 8px;
+        }
+        
+        .contact-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background-color: #d4a762;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .contact-icon {
+            background-color: #f0f0f0;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            flex-shrink: 0;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #4a6572;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .social-icon:hover {
+            background-color: #d4a762;
+            transform: translateY(-3px);
+        }
+        
+        /* Admin Panel */
+        .admin-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .admin-section {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .admin-section-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .stat-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border-left: 4px solid #d4a762;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        .users-list, .items-list {
+            max-height: 180px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .user-item, .item-row {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-item:last-child, .item-row:last-child {
+            border-bottom: none;
+        }
+        
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .add-item-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        
+        .image-upload-container {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: #f9f9f9;
+        }
+        
+        .image-upload-container:hover {
+            border-color: #d4a762;
+            background-color: #f5f5f5;
+        }
+        
+        .image-upload-container i {
+            font-size: 2rem;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+        
+        .image-preview {
+            width: 100%;
+            height: 150px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-style: italic;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        /* Logout Button */
+        .logout-btn {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background-color: #2c3e50;
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #d4a762;
+            transform: scale(1.1);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from { 
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.85rem;
+            border-top: 1px solid #eee;
+        }
+        
+        /* File Input Styling */
+        .file-input-label {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #4a6572;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            margin-top: 5px;
+        }
+        
+        .file-input-label:hover {
+            background-color: #2c3e50;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .filename {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+            word-break: break-all;
+        }
+        
+        /* Responsive adjustments for very small screens */
+        @media (max-width: 400px) {
+            body {
+                max-width: 100%;
+            }
+            
+            .page {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 15px 10px;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .form-container, .contact-container, .admin-container {
+                padding: 15px;
+            }
+            
+            .products-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Registration Page -->
+    <div id="registration-page" class="page active">
+        <header>
+            <div class="logo">Paper Bags, Cups, & Dish</div>
+            <div class="tagline">Premium Paper Products for Your Business</div>
+        </header>
+        
+        <div class="form-container">
+            <h2 class="form-title">Registration</h2>
+            <p style="text-align: center; margin-bottom: 15px; color: #666; font-size: 0.9rem;">Registration is required to access our full product catalog</p>
+            
+            <form id="registration-form">
+                <div class="form-group">
+                    <label for="fullname">Full Name *</label>
+                    <input type="text" id="fullname" required placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" required placeholder="Enter your email address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" required placeholder="Enter your phone number">
+                </div>
+                
+                <div class="form-group">
+                    <label for="company">Company Name</label>
+                    <input type="text" id="company" placeholder="Enter your company name (optional)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="business">Business Type</label>
+                    <select id="business">
+                        <option value="">Select your business type</option>
+                        <option value="retail">Retail</option>
+                        <option value="restaurant">Restaurant/Cafe</option>
+                        <option value="manufacturing">Manufacturing</option>
+                        <option value="distributor">Distributor</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn">Complete Registration</button>
+            </form>
+            
+            <div style="margin-top: 20px; text-align: center;">
+                <p style="color: #666; margin-bottom: 12px; font-size: 0.9rem;">Admin Login</p>
+                <button id="admin-login-btn" class="btn btn-secondary">Admin Panel Login</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Paper Bags, Cups, & Dish. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <!-- Main Products Page -->
+    <div id="main-page" class="page">
+        <header>
+            <div class="logo">Paper Bags, Cups, & Dish</div>
+            <div class="tagline">Premium Paper Products for Your Business</div>
+        </header>
+        
+        <div class="options-container">
+            <div class="option-card" data-page="bags-page">
+                <div class="option-image bags-image"></div>
+                <div class="option-content">
+                    <h3 class="option-title">Paper Bags</h3>
+                    <p class="option-desc">Eco-friendly paper bags in various sizes, colors, and designs suitable for retail, grocery, and gift packaging.</p>
+                </div>
+            </div>
+            
+            <div class="option-card" data-page="cups-page">
+                <div class="option-image cups-image"></div>
+                <div class="option-content">
+                    <h3 class="option-title">Paper Cups</h3>
+                    <p class="option-desc">High-quality disposable paper cups for hot and cold beverages, customizable with your brand logo.</p>
+                </div>
+            </div>
+            
+            <div class="option-card" data-page="dish-page">
+                <div class="option-image dish-image"></div>
+                <div class="option-content">
+                    <h3 class="option-title">Paper Dish</h3>
+                    <p class="option-desc">Durable paper plates, bowls, and trays perfect for food service, events, and catering businesses.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Talk with Us Section -->
+        <div class="contact-container">
+            <h3 class="contact-title">Talk With Us</h3>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div>
+                        <strong>Padmavati Trading</strong>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div>
+                        <strong>+91 94282 90873</strong>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <strong>tdoshi391@gmail.com</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="social-icons">
+                <a href="https://www.facebook.com/share/19ucNNmxGP/" class="social-icon" target="_blank">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-icon" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://www.instagram.com/tirthdoshi2007/" class="social-icon" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/tirth-doshi-58619a375?/" class="social-icon" target="_blank">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://wa.me/9428290873" class="social-icon" target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+            
+            <h4 style="text-align: center; margin: 15px 0 12px; color: #2c3e50; font-size: 1rem;">Send Us a Message</h4>
+            <form id="contact-form">
+                <div class="form-group">
+                    <input type="text" id="contact-name" placeholder="Your Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" id="contact-email" placeholder="Your Email" required>
+                </div>
+                
+                <div class="form-group">
+                    <textarea id="contact-message" rows="3" placeholder="Your Message" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+        
+        <footer>
+            <p>© 2023 Paper Bags, Cups, & Dish. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <!-- Paper Bags Page -->
+    <div id="bags-page" class="page">
+        <div class="products-header">
+            <button class="back-btn" data-page="main-page">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2 class="page-title">Paper Bags Collection</h2>
+            <div style="width: 60px;"></div> <!-- Spacer for alignment -->
+        </div>
+        
+        <div id="bags-container" class="products-container">
+            <!-- Products will be loaded here from database -->
+        </div>
+        
+        <!-- Talk with Us Section -->
+        <div class="contact-container">
+            <h3 class="contact-title">Talk With Us</h3>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div>
+                        <strong>Padmavati Trading</strong>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div>
+                        <strong>+91 94282 90873</strong>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <strong>tdoshi391@gmail.com</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="social-icons">
+                <a href="#" class="social-icon">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+            
+            <h4 style="text-align: center; margin: 15px 0 12px; color: #2c3e50; font-size: 1rem;">Send Us a Message</h4>
+            <form class="page-contact-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" placeholder="Your Email" required>
+                </div>
+                
+                <div class="form-group">
+                    <textarea rows="3" placeholder="Your Message" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+        
+        <footer>
+            <p>© 2023 Paper Bags, Cups, & Dish. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <!-- Paper Cups Page -->
+    <div id="cups-page" class="page">
+        <div class="products-header">
+            <button class="back-btn" data-page="main-page">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2 class="page-title">Paper Cups Collection</h2>
+            <div style="width: 60px;"></div> <!-- Spacer for alignment -->
+        </div>
+        
+        <div id="cups-container" class="products-container">
+            <!-- Products will be loaded here from database -->
+        </div>
+        
+        <!-- Talk with Us Section -->
+        <div class="contact-container">
+            <h3 class="contact-title">Talk With Us</h3>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div>
+                        <strong>Padmavati Trading</strong>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div>
+                        <strong>+91 94282 90873</strong>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <strong>tdoshi391@gmail.com</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="social-icons">
+                <a href="#" class="social-icon">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+            
+            <h4 style="text-align: center; margin: 15px 0 12px; color: #2c3e50; font-size: 1rem;">Send Us a Message</h4>
+            <form class="page-contact-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" placeholder="Your Email" required>
+                </div>
+                
+                <div class="form-group">
+                    <textarea rows="3" placeholder="Your Message" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+        
+        <footer>
+            <p>© 2023 Paper Bags, Cups, & Dish. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <!-- Paper Dish Page -->
+    <div id="dish-page" class="page">
+        <div class="products-header">
+            <button class="back-btn" data-page="main-page">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2 class="page-title">Paper Dish Collection</h2>
+            <div style="width: 60px;"></div> <!-- Spacer for alignment -->
+        </div>
+        
+        <div id="dish-container" class="products-container">
+            <!-- Products will be loaded here from database -->
+        </div>
+        
+        <!-- Talk with Us Section -->
+        <div class="contact-container">
+            <h3 class="contact-title">Talk With Us</h3>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div>
+                        <strong>Padmavati Trading</strong>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div>
+                        <strong>+91 94282 90873</strong>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <strong>tdoshi391@gmail.com</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="social-icons">
+                <a href="#" class="social-icon">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+            
+            <h4 style="text-align: center; margin: 15px 0 12px; color: #2c3e50; font-size: 1rem;">Send Us a Message</h4>
+            <form class="page-contact-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" placeholder="Your Email" required>
+                </div>
+                
+                <div class="form-group">
+                    <textarea rows="3" placeholder="Your Message" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+        
+        <footer>
+            <p>© 2023 Paper Bags, Cups, & Dish. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <!-- Product Details Page -->
+    <div id="product-details-page" class="page">
+        <div class="products-header">
+            <button class="back-btn" id="details-back-btn">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2 class="page-title">Product Details</h2>
+            <div style="width: 60px;"></div> <!-- Spacer for alignment -->
+        </div>
+        
+        <div id="product-details-container" class="product-details-container">
+            <!-- Product details will be loaded here -->
+        </div>
+        
+        <!-- Talk with Us Section -->
+        <div class="contact-container">
+            <h3 class="contact-title">Talk With Us</h3>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div>
+                        <strong>Padmavati Trading</strong>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div>
+                        <strong>+91 94282 90873</strong>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <strong>tdoshi391@gmail.com</strong>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="social-icons">
+                <a href="#" class="social-icon">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="social-icon">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+            
+            <h4 style="text-align: center; margin: 15px 0 12px; color: #2c3e50; font-size: 1rem;">Send Us a Message</h4>
+            <form class="page-contact-form">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" placeholder="Your Email" required>
+                </div>
+                
+                <div class="form-group">
+                    <textarea rows="3" placeholder="Your Message" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+        
+        <footer>
+            <p>© 2023 Paper Bags, Cups, & Dish. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <!-- Admin Login Page -->
+    <div id="admin-login-page" class="page">
+        <header>
+            <div class="logo">Admin Login</div>
+            <div class="tagline">Paper Bags, Cups, & Dish Management System</div>
+        </header>
+        
+        <div class="form-container">
+            <h2 class="form-title">Admin Panel Login</h2>
+            <p style="text-align: center; margin-bottom: 15px; color: #666; font-size: 0.9rem;">Enter your credentials to access the admin panel</p>
+            
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <label for="admin-name">Username *</label>
+                    <input type="text" id="admin-name" required placeholder="Enter admin username">
+                </div>
+                
+                <div class="form-group">
+                    <label for="admin-password">Password *</label>
+                    <input type="password" id="admin-password" required placeholder="Enter admin password">
+                </div>
+                
+                <button type="submit" class="btn">Login to Admin Panel</button>
+            </form>
+            
+            <div style="margin-top: 20px; text-align: center;">
+                <button id="back-to-registration" class="btn btn-secondary">Back to Registration</button>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Paper Bags, Cups, & Dish. Admin access only.</p>
+        </footer>
+    </div>
+    
+    <!-- Admin Panel Page -->
+    <div id="admin-panel" class="page">
+        <header>
+            <div class="logo">Admin Panel</div>
+            <div class="tagline">Manage Users, Products, and Content</div>
+        </header>
+        
+        <div class="admin-container">
+            <div class="admin-section">
+                <h3 class="admin-section-title">
+                    <i class="fas fa-chart-bar"></i> Statistics Overview
+                </h3>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-users">0</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-bags">0</div>
+                        <div class="stat-label">Paper Bags</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-cups">0</div>
+                        <div class="stat-label">Paper Cups</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-dishes">0</div>
+                        <div class="stat-label">Paper Dishes</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-section">
+                <h3 class="admin-section-title">
+                    <i class="fas fa-users"></i> Registered Users
+                </h3>
+                
+                <div id="users-list" class="users-list">
+                    <!-- Users will be loaded here -->
+                </div>
+            </div>
+            
+            <div class="admin-section">
+                <h3 class="admin-section-title">
+                    <i class="fas fa-box-open"></i> Manage Products
+                </h3>
+                
+                <div class="form-container" style="margin-top: 15px; padding: 15px;">
+                    <h4 style="text-align: center; margin-bottom: 15px; color: #2c3e50;">Add New Product</h4>
+                    
+                    <form id="add-product-form">
+                        <div class="form-group">
+                            <label for="product-category">Product Category *</label>
+                            <select id="product-category" required>
+                                <option value="">Select Category</option>
+                                <option value="bags">Paper Bags</option>
+                                <option value="cups">Paper Cups</option>
+                                <option value="dishes">Paper Dishes</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-name">Product Name *</label>
+                            <input type="text" id="product-name" required placeholder="Enter product name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-image">Product Image *</label>
+                            <div class="image-upload-container" id="image-upload-area">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Click to upload JPG image</p>
+                                <p style="font-size: 0.8rem; margin-top: 5px;">Max file size: 2MB</p>
+                                <input type="file" id="product-image-file" accept=".jpg,.jpeg" class="file-input">
+                            </div>
+                            <div id="filename" class="filename"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Image Preview</label>
+                            <div id="image-preview" class="image-preview">
+                                <span>Image preview will appear here</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-desc">Product Description *</label>
+                            <textarea id="product-desc" rows="3" required placeholder="Enter product description"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="product-details">Product Details (for details page)</label>
+                            <textarea id="product-details" rows="3" placeholder="Enter full product details"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn">Add Product</button>
+                    </form>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 12px; color: #2c3e50;">Existing Products</h4>
+                    <div id="products-list" class="items-list">
+                        <!-- Products will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Paper Bags, Cups, & Dish. Admin panel.</p>
+        </footer>
+    </div>
+    
+    <!-- Logout Button -->
+    <div class="logout-btn" id="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+    </div>
+
+    <script>
+        // Database simulation using localStorage
+        const database = {
+            // Initialize database if not exists
+            init: function() {
+                if (!localStorage.getItem('paperProductsDB')) {
+                    const defaultDB = {
+                        users: [],
+                        products: {
+                            bags: [],
+                            cups: [],
+                            dishes: []
+                        },
+                        admin: {
+                            username: 'tirth',
+                            password: 'tirth123'
+                        },
+                        currentProductId: null,
+                        lastProductPage: null
+                    };
+                    localStorage.setItem('paperProductsDB', JSON.stringify(defaultDB));
+                }
+                return JSON.parse(localStorage.getItem('paperProductsDB'));
+            },
+            
+            // Save database to localStorage
+            save: function(db) {
+                localStorage.setItem('paperProductsDB', JSON.stringify(db));
+            },
+            
+            // Add a new user
+            addUser: function(user) {
+                const db = this.init();
+                user.id = Date.now(); // Simple ID generation
+                user.registeredAt = new Date().toLocaleDateString();
+                db.users.push(user);
+                this.save(db);
+                return user;
+            },
+            
+            // Get all users
+            getUsers: function() {
+                const db = this.init();
+                return db.users;
+            },
+            
+            // Add a product
+            addProduct: function(category, product) {
+                const db = this.init();
+                product.id = Date.now();
+                product.addedAt = new Date().toLocaleDateString();
+                product.category = category;
+                
+                if (category === 'bags') {
+                    db.products.bags.push(product);
+                } else if (category === 'cups') {
+                    db.products.cups.push(product);
+                } else if (category === 'dishes') {
+                    db.products.dishes.push(product);
+                }
+                
+                this.save(db);
+                return product;
+            },
+            
+            // Get products by category
+            getProducts: function(category) {
+                const db = this.init();
+                if (category === 'bags') {
+                    return db.products.bags;
+                } else if (category === 'cups') {
+                    return db.products.cups;
+                } else if (category === 'dishes') {
+                    return db.products.dishes;
+                }
+                return [];
+            },
+            
+            // Get product by ID
+            getProductById: function(id) {
+                const db = this.init();
+                let foundProduct = null;
+                
+                // Check all categories
+                ['bags', 'cups', 'dishes'].forEach(category => {
+                    const product = db.products[category].find(p => p.id == id);
+                    if (product) {
+                        foundProduct = product;
+                        foundProduct.category = category;
+                    }
+                });
+                
+                return foundProduct;
+            },
+            
+            // Delete a product by ID
+            deleteProduct: function(id) {
+                const db = this.init();
+                let deleted = false;
+                
+                // Check all categories
+                ['bags', 'cups', 'dishes'].forEach(category => {
+                    const index = db.products[category].findIndex(p => p.id == id);
+                    if (index !== -1) {
+                        db.products[category].splice(index, 1);
+                        deleted = true;
+                    }
+                });
+                
+                if (deleted) {
+                    this.save(db);
+                }
+                return deleted;
+            },
+            
+            // Set current product and last page for details view
+            setCurrentProduct: function(productId, lastPage) {
+                const db = this.init();
+                db.currentProductId = productId;
+                db.lastProductPage = lastPage;
+                this.save(db);
+            },
+            
+            // Get current product info
+            getCurrentProductInfo: function() {
+                const db = this.init();
+                return {
+                    productId: db.currentProductId,
+                    lastPage: db.lastProductPage
+                };
+            },
+            
+            // Verify admin credentials
+            verifyAdmin: function(username, password) {
+                const db = this.init();
+                return db.admin.username === username && db.admin.password === password;
+            }
+        };
+        
+        // Initialize the database
+        database.init();
+        
+        // DOM Elements
+        const pages = document.querySelectorAll('.page');
+        const registrationForm = document.getElementById('registration-form');
+        const adminLoginBtn = document.getElementById('admin-login-btn');
+        const adminLoginForm = document.getElementById('admin-login-form');
+        const backToRegistrationBtn = document.getElementById('back-to-registration');
+        const logoutBtn = document.getElementById('logout-btn');
+        const optionCards = document.querySelectorAll('.option-card');
+        const backButtons = document.querySelectorAll('.back-btn');
+        const detailsBackBtn = document.getElementById('details-back-btn');
+        const contactForms = document.querySelectorAll('.page-contact-form, #contact-form');
+        const addProductForm = document.getElementById('add-product-form');
+        const imageUploadArea = document.getElementById('image-upload-area');
+        const productImageFile = document.getElementById('product-image-file');
+        const filenameDisplay = document.getElementById('filename');
+        const imagePreview = document.getElementById('image-preview');
+        
+        // Variables for image handling
+        let uploadedImageData = null;
+        
+        // Navigation functions
+        function showPage(pageId) {
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update product displays when navigating to product pages
+            if (pageId === 'bags-page') {
+                loadProducts('bags');
+            } else if (pageId === 'cups-page') {
+                loadProducts('cups');
+            } else if (pageId === 'dish-page') {
+                loadProducts('dishes');
+            } else if (pageId === 'admin-panel') {
+                loadAdminPanel();
+            } else if (pageId === 'product-details-page') {
+                loadProductDetails();
+            }
+        }
+        
+        // Load products for a specific category
+        function loadProducts(category) {
+            const products = database.getProducts(category);
+            const containerId = `${category}-container`;
+            const container = document.getElementById(containerId);
+            
+            if (!container) return;
+            
+            // Clear container
+            container.innerHTML = '';
+            
+            if (products.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-box-open" style="font-size: 2.5rem; margin-bottom: 12px; color: #ccc;"></i>
+                        <h3 style="margin-bottom: 8px; color: #666;">No Products Added Yet</h3>
+                        <p style="font-size: 0.9rem;">Products will appear here once added by the admin.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Add products to container
+            products.forEach((product, index) => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.style.animationDelay = `${index * 0.1}s`;
+                productCard.innerHTML = `
+                    <div class="product-image" style="background-image: url('${product.image || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200" viewBox="0 0 400 200"><rect width="400" height="200" fill="%23f8f9fa"/><text x="200" y="100" font-family="Times New Roman" font-size="18" fill="%23999" text-anchor="middle">Product Image</text></svg>'}')"></div>
+                    <div class="product-content">
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-desc">${product.description}</p>
+                    </div>
+                `;
+                
+                // Add click event to show product details
+                productCard.addEventListener('click', function() {
+                    // Set current product and last page
+                    const currentPage = category === 'bags' ? 'bags-page' : 
+                                      category === 'cups' ? 'cups-page' : 'dish-page';
+                    database.setCurrentProduct(product.id, currentPage);
+                    showPage('product-details-page');
+                });
+                
+                container.appendChild(productCard);
+            });
+        }
+        
+        // Load product details
+        function loadProductDetails() {
+            const productInfo = database.getCurrentProductInfo();
+            const productId = productInfo.productId;
+            const lastPage = productInfo.lastPage;
+            
+            if (!productId) {
+                showPage(lastPage || 'main-page');
+                return;
+            }
+            
+            const product = database.getProductById(productId);
+            const container = document.getElementById('product-details-container');
+            
+            if (!product || !container) {
+                showPage(lastPage || 'main-page');
+                return;
+            }
+            
+            // Update back button to return to the correct page
+            detailsBackBtn.setAttribute('data-page', lastPage || 'main-page');
+            
+            // Display product details
+            container.innerHTML = `
+                <div class="product-details-image" style="background-image: url('${product.image || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><rect width="400" height="400" fill="%23f8f9fa"/><text x="200" y="200" font-family="Times New Roman" font-size="24" fill="%23999" text-anchor="middle">Product Image</text></svg>'}')"></div>
+                <div class="product-details-content">
+                    <h2 class="product-details-name">${product.name}</h2>
+                    <p class="product-details-full">${product.details || product.description || 'No detailed description available.'}</p>
+                    <span class="details-label">Category:</span>
+                    <p>${product.category === 'bags' ? 'Paper Bags' : product.category === 'cups' ? 'Paper Cups' : 'Paper Dishes'}</p>
+                    <span class="details-label">Added on:</span>
+                    <p>${product.addedAt || 'Unknown date'}</p>
+                </div>
+            `;
+        }
+        
+        // Load admin panel data
+        function loadAdminPanel() {
+            const users = database.getUsers();
+            const bags = database.getProducts('bags');
+            const cups = database.getProducts('cups');
+            const dishes = database.getProducts('dishes');
+            
+            // Update statistics
+            document.getElementById('total-users').textContent = users.length;
+            document.getElementById('total-bags').textContent = bags.length;
+            document.getElementById('total-cups').textContent = cups.length;
+            document.getElementById('total-dishes').textContent = dishes.length;
+            
+            // Load users list
+            const usersList = document.getElementById('users-list');
+            usersList.innerHTML = '';
+            
+            if (users.length === 0) {
+                usersList.innerHTML = '<div class="user-item" style="justify-content: center; color: #777; font-style: italic;">No registered users yet</div>';
+            } else {
+                users.forEach(user => {
+                    const userItem = document.createElement('div');
+                    userItem.className = 'user-item';
+                    userItem.innerHTML = `
+                        <div>
+                            <strong>${user.fullname}</strong><br>
+                            <small>${user.email} • ${user.registeredAt}</small>
+                        </div>
+                        <div>
+                            <small>${user.company || 'No company'}</small>
+                        </div>
+                    `;
+                    usersList.appendChild(userItem);
+                });
+            }
+            
+            // Load products list
+            const productsList = document.getElementById('products-list');
+            productsList.innerHTML = '';
+            
+            const allProducts = [
+                ...bags.map(p => ({...p, category: 'Paper Bags'})),
+                ...cups.map(p => ({...p, category: 'Paper Cups'})),
+                ...dishes.map(p => ({...p, category: 'Paper Dishes'}))
+            ];
+            
+            if (allProducts.length === 0) {
+                productsList.innerHTML = '<div class="item-row" style="justify-content: center; color: #777; font-style: italic;">No products added yet</div>';
+            } else {
+                allProducts.forEach(product => {
+                    const itemRow = document.createElement('div');
+                    itemRow.className = 'item-row';
+                    itemRow.innerHTML = `
+                        <div>
+                            <strong>${product.name}</strong><br>
+                            <small>${product.category} • Added: ${product.addedAt}</small>
+                        </div>
+                        <button class="delete-btn" data-id="${product.id}">Delete</button>
+                    `;
+                    productsList.appendChild(itemRow);
+                });
+                
+                // Add event listeners to delete buttons
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const productId = this.getAttribute('data-id');
+                        if (confirm('Are you sure you want to delete this product?')) {
+                            if (database.deleteProduct(productId)) {
+                                loadAdminPanel(); // Refresh the admin panel
+                                
+                                // Also refresh any open product pages
+                                if (document.getElementById('bags-page').classList.contains('active')) {
+                                    loadProducts('bags');
+                                } else if (document.getElementById('cups-page').classList.contains('active')) {
+                                    loadProducts('cups');
+                                } else if (document.getElementById('dish-page').classList.contains('active')) {
+                                    loadProducts('dishes');
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+        }
+        
+        // Convert image file to base64 data URL
+        function convertImageToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+        
+        // Event Listeners
+        // Registration form submission
+        registrationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const user = {
+                fullname: document.getElementById('fullname').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                company: document.getElementById('company').value,
+                businessType: document.getElementById('business').value
+            };
+            
+            // Add user to database
+            database.addUser(user);
+            
+            // Show main page
+            showPage('main-page');
+            
+            // Reset form
+            registrationForm.reset();
+        });
+        
+        // Admin login button
+        adminLoginBtn.addEventListener('click', function() {
+            showPage('admin-login-page');
+        });
+        
+        // Back to registration button
+        backToRegistrationBtn.addEventListener('click', function() {
+            showPage('registration-page');
+        });
+        
+        // Admin login form submission
+        adminLoginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('admin-name').value;
+            const password = document.getElementById('admin-password').value;
+            
+            if (database.verifyAdmin(username, password)) {
+                showPage('admin-panel');
+                adminLoginForm.reset();
+            } else {
+                alert('Invalid admin credentials. Please try again.');
+            }
+        });
+        
+        // Option cards navigation
+        optionCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const page = this.getAttribute('data-page');
+                showPage(page);
+            });
+        });
+        
+        // Back buttons navigation
+        backButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const page = this.getAttribute('data-page');
+                showPage(page);
+            });
+        });
+        
+        // Details back button
+        detailsBackBtn.addEventListener('click', function() {
+            const page = this.getAttribute('data-page');
+            showPage(page);
+        });
+        
+        // Contact forms submission
+        contactForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you for your message! We will contact you soon.');
+                this.reset();
+            });
+        });
+        
+        // Logout button
+        logoutBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to logout?')) {
+                showPage('registration-page');
+            }
+        });
+        
+        // Image upload area click
+        imageUploadArea.addEventListener('click', function() {
+            productImageFile.click();
+        });
+        
+        // Handle image file selection
+        productImageFile.addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Check if file is JPG
+            if (!file.type.match('image/jpeg') && !file.type.match('image/jpg')) {
+                alert('Please upload a JPG image file.');
+                productImageFile.value = '';
+                return;
+            }
+            
+            // Check file size (max 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Image size should be less than 2MB.');
+                productImageFile.value = '';
+                return;
+            }
+            
+            // Display filename
+            filenameDisplay.textContent = `Selected file: ${file.name}`;
+            
+            // Convert to base64 and preview
+            try {
+                uploadedImageData = await convertImageToBase64(file);
+                imagePreview.innerHTML = `<img src="${uploadedImageData}" alt="Product Preview" />`;
+            } catch (error) {
+                console.error('Error converting image:', error);
+                alert('Error processing image. Please try another file.');
+                productImageFile.value = '';
+                filenameDisplay.textContent = '';
+                uploadedImageData = null;
+                imagePreview.innerHTML = '<span>Image preview will appear here</span>';
+            }
+        });
+        
+        // Add product form submission
+        addProductForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const category = document.getElementById('product-category').value;
+            const name = document.getElementById('product-name').value;
+            const description = document.getElementById('product-desc').value;
+            const details = document.getElementById('product-details').value;
+            
+            if (!category) {
+                alert('Please select a product category.');
+                return;
+            }
+            
+            if (!uploadedImageData) {
+                alert('Please upload a product image.');
+                return;
+            }
+            
+            const product = {
+                name,
+                image: uploadedImageData,
+                description,
+                details
+            };
+            
+            database.addProduct(category, product);
+            alert('Product added successfully!');
+            
+            // Reset form
+            addProductForm.reset();
+            filenameDisplay.textContent = '';
+            uploadedImageData = null;
+            imagePreview.innerHTML = '<span>Image preview will appear here</span>';
+            productImageFile.value = '';
+            
+            // Reload admin panel to show new product
+            loadAdminPanel();
+        });
+        
+        // Initialize the page on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already registered (simple check)
+            const users = database.getUsers();
+            // If you want to skip registration for testing, uncomment the line below:
+            // if (users.length > 0) showPage('main-page');
+            
+            // Load initial data if needed
+            loadAdminPanel();
+            
+            // Set mobile viewport height
+            function setMobileHeight() {
+                document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+            }
+            
+            setMobileHeight();
+            window.addEventListener('resize', setMobileHeight);
+        });
+    </script>
+</body>
+</html>
